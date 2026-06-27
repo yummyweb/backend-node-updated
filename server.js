@@ -51,7 +51,8 @@ app.use(helmet({
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = process.env.CORS_ORIGINS.split(',').map((o) => o.trim());
 app.use(cors({
-    origin: "https://medicalnegligance.netlify.app"
+    origin: "https://medicalnegligance.netlify.app",
+    credentials: true
 }));
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
