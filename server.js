@@ -50,14 +50,7 @@ app.use(helmet({
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = process.env.CORS_ORIGINS.split(',').map((o) => o.trim());
-app.use(cors({
-  origin: (origin, cb) => {
-    // Allow requests with no origin (curl, mobile apps, same-origin)
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    cb(new Error(`CORS: origin ${origin} not allowed`));
-  },
-  credentials: true
-}));
+app.use(cors());
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
 const authLimiter = rateLimit({
