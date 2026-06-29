@@ -43,15 +43,30 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
+const allowedOrigins = [
+    "https://drdeath.in",
+    "https://medicalnegligance.netlify.app"
+]
+
 // ── Security headers ──────────────────────────────────────────────────────────
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'same-site' }
 }));
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
-const allowedOrigins = process.env.CORS_ORIGINS.split(',').map((o) => o.trim());
 app.use(cors({
-    origin: "https://medicalnegligance.netlify.app",
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl, or Postman)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            // Origin is allowed, pass null as error and true as success
+            callback(null, true);
+        } else {
+            // Origin is blocked, pass an error
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 
